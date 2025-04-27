@@ -1,0 +1,49 @@
+-- Step 1: Create a database
+CREATE DATABASE ProductsDB;
+
+-- Step 2: Use the created database
+USE ProductsDB;
+
+-- Creating Category table
+CREATE TABLE Category (
+    CategoryID INT PRIMARY KEY,                 -- Unique identifier for category
+    CategoryName VARCHAR(100)                    -- Category name
+);
+
+-- Creating Product table with Foreign Key reference to Category
+CREATE TABLE Product (
+    ProductID INT PRIMARY KEY,                   -- Unique identifier for product
+    ProductName VARCHAR(100),                     -- Product name
+    CategoryID INT,                               -- Foreign key referencing Category
+    Price DECIMAL(10, 2),                         -- Product price
+    ManufactureDate DATE,                         -- Product manufacture date
+    FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID)  -- Foreign key constraint
+);
+
+-- Insert Values into Category table
+INSERT INTO Category (CategoryID, CategoryName) VALUES
+(1, 'Electronics'),
+(2, 'Furniture'),
+(3, 'Clothing'),
+(4, 'Groceries');
+
+-- Insert Values into Product table
+INSERT INTO Product (ProductID, ProductName, CategoryID, Price, ManufactureDate) VALUES
+(101, 'Laptop', 1, 1200.00, '2023-06-15'),
+(102, 'Sofa', 2, 800.00, '2022-11-22'),
+(103, 'T-Shirt', 3, 25.00, '2024-01-01'),
+(104, 'Apples', 4, 3.50, '2024-04-01');
+
+-- Alter Table: Add a new column to Product table
+ALTER TABLE Product
+ADD StockQuantity INT;  -- Add stock quantity column to track available products
+
+-- Alter Table: Modify column data type (increase ProductName size)
+ALTER TABLE Product
+MODIFY ProductName VARCHAR(150);
+
+-- Drop the Product table
+DROP TABLE Product;
+
+-- Drop the Category table
+DROP TABLE Category;

@@ -1,0 +1,87 @@
+[Movie] (MovieID, Title, Director, Genre, Year)
+   |
+   |<----- (MovieID)
+   |
+(Rental) (RentalID, RentalDate, ReturnDate, MovieID, CustomerID)
+   |
+   |-----> (CustomerID)
+   |
+[Customer] (CustomerID, Name, Address, Phone)
+
+
+
+
+
+-- Create the Database
+CREATE DATABASE MovieRentalDB;
+USE MovieRentalDB;
+
+-- Create the Movie table
+CREATE TABLE Movie (
+    MovieID INT PRIMARY KEY AUTO_INCREMENT,
+    Title VARCHAR(255) NOT NULL,
+    Director VARCHAR(255),
+    Genre VARCHAR(255),
+    Year YEAR
+);
+
+-- Create the Customer table
+CREATE TABLE Customer (
+    CustomerID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(255) NOT NULL,
+    Address VARCHAR(255),
+    Phone VARCHAR(20)
+);
+
+-- Create the Rental table
+CREATE TABLE Rental (
+    RentalID INT PRIMARY KEY AUTO_INCREMENT,
+    RentalDate DATE NOT NULL,
+    ReturnDate DATE,
+    MovieID INT,
+    CustomerID INT,
+    FOREIGN KEY (MovieID) REFERENCES Movie(MovieID),
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
+);
+
+-- Insert data into the Movie table
+INSERT INTO Movie (Title, Director, Genre, Year) VALUES
+('Inception', 'Christopher Nolan', 'Sci-Fi', 2010),
+('The Shawshank Redemption', 'Frank Darabont', 'Drama', 1994),
+('The Dark Knight', 'Christopher Nolan', 'Action', 2008),
+('Pulp Fiction', 'Quentin Tarantino', 'Crime', 1994);
+
+-- Insert data into the Customer table
+INSERT INTO Customer (Name, Address, Phone) VALUES
+('John Doe', '101 Main Street', '555-1010'),
+('Jane Smith', '202 Elm Street', '555-2020'),
+('Sam Brown', '303 Birch Avenue', '555-3030');
+
+-- Insert data into the Rental table
+INSERT INTO Rental (RentalDate, ReturnDate, MovieID, CustomerID) VALUES
+('2025-04-01', '2025-04-10', 1, 1),
+('2025-04-05', NULL, 2, 2),
+('2025-04-07', '2025-04-14', 3, 3);
+
+-- Select all data from the Movie table
+SELECT * FROM Movie;
+
+-- Select all data from the Customer table
+SELECT * FROM Customer;
+
+-- Select all data from the Rental table
+SELECT * FROM Rental;
+
+-- View a full report combining Rental info, Movie title, and Customer name
+SELECT 
+    Rental.RentalID,
+    Customer.Name AS CustomerName,
+    Movie.Title AS MovieTitle,
+    Rental.RentalDate,
+    Rental.ReturnDate
+FROM 
+    Rental
+INNER JOIN 
+    Customer ON Rental.CustomerID = Customer.CustomerID
+INNER JOIN 
+    Movie ON Rental.MovieID = Movie.MovieID;

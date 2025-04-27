@@ -1,0 +1,132 @@
+-- 1. Create Database
+CREATE DATABASE storeDB;
+
+-- 2. Use the newly created database
+USE storeDB;
+
+-- 3. Create the PRODUCTS table
+CREATE TABLE PRODUCTS (
+    PRODUCT_ID INT PRIMARY KEY,         -- PRODUCT_ID is the primary key
+    PRODUCT_NAME VARCHAR(50),           -- PRODUCT_NAME is a string up to 50 characters
+    CATEGORY VARCHAR(30),              -- CATEGORY is a string up to 30 characters
+    PRICE DECIMAL(10, 2),               -- PRICE is a decimal number with 2 decimal places
+    STOCK INT                          -- STOCK is an integer
+);
+
+-- 4. Insert sample data into the PRODUCTS table
+INSERT INTO PRODUCTS (PRODUCT_ID, PRODUCT_NAME, CATEGORY, PRICE, STOCK) VALUES
+(1, 'Laptop', 'Electronics', 800.00, 50),
+(2, 'Smartphone', 'Electronics', 600.00, 100),
+(3, 'Shoes', 'Apparel', 50.00, 200),
+(4, 'T-Shirt', 'Apparel', 20.00, 150),
+(5, 'Coffee Maker', 'Appliances', 120.00, 70),
+(6, 'Refrigerator', 'Appliances', 500.00, 30),
+(7, 'Watch', 'Accessories', 150.00, 120);
+
+-- 5. Relational Operators - Using AND
+-- Find products with a price greater than 100 and stock less than 100
+SELECT PRODUCT_ID, PRODUCT_NAME, PRICE, STOCK 
+FROM PRODUCTS 
+WHERE PRICE > 100 AND STOCK < 100;
+
+-- 6. Relational Operators - Using OR
+-- Find products with a price greater than 100 or stock less than 100
+SELECT PRODUCT_ID, PRODUCT_NAME, PRICE, STOCK 
+FROM PRODUCTS 
+WHERE PRICE > 100 OR STOCK < 100;
+
+-- 7. Arithmetic Operators
+-- Select all products where the price equals price + 50 (effectively checks if price is unchanged)
+SELECT * FROM PRODUCTS 
+WHERE PRICE = PRICE + 50;
+
+-- 8. Boolean Operators and Pattern Matching - Using LIKE
+-- Find products whose name starts with 'S'
+SELECT * FROM PRODUCTS 
+WHERE PRODUCT_NAME LIKE 'S%';
+
+-- 9. Arithmetic Operations and Built-in Functions
+-- Calculate total stock of all products
+SELECT SUM(STOCK) AS TotalStock FROM PRODUCTS;
+
+-- Find the average price of products
+SELECT AVG(PRICE) AS AveragePrice FROM PRODUCTS;
+
+-- Count the number of products
+SELECT COUNT(*) AS TotalProducts FROM PRODUCTS;
+
+-- Find the maximum price among products
+SELECT MAX(PRICE) AS MaxPrice FROM PRODUCTS;
+
+-- Find the minimum price among products
+SELECT MIN(PRICE) AS MinPrice FROM PRODUCTS;
+
+-- 10. Group Functions (Aggregate Functions)
+-- Group by category and calculate the total stock in each category
+SELECT CATEGORY, SUM(STOCK) AS TotalStock
+FROM PRODUCTS
+GROUP BY CATEGORY;
+
+-- 11. Date and Time Functions
+-- Extract the date from a datetime value
+SELECT DATE("2025-04-27 14:05:21");
+
+-- Get the current date
+SELECT CURDATE();
+
+-- Add 1 year to the current date
+SELECT DATE_ADD(CURDATE(), INTERVAL 1 YEAR);
+
+-- 12. Set Operations - UNION
+-- Select products from category1 and category2 using UNION
+SELECT * FROM category1
+UNION
+SELECT * FROM category2;
+
+-- 13. Set Operations - INTERSECT
+-- Find records common between category1 and category2 using INTERSECT
+SELECT * FROM category1
+INTERSECT
+SELECT * FROM category2;
+
+-- 14. Set Operations - EXCEPT
+-- Find records that are in category1 but not in category2 using EXCEPT
+SELECT * FROM category1
+EXCEPT
+SELECT * FROM category2;
+
+-- 15. Nested Queries (Subqueries or Complex Queries)
+-- Select products whose PRODUCT_ID is in the list of IDs with price greater than 100
+SELECT * 
+FROM PRODUCTS 
+WHERE PRODUCT_ID IN (SELECT PRODUCT_ID FROM PRODUCTS WHERE PRICE > 100);
+
+-- 16. Pattern Matching Using LIKE Clause
+-- Find all products whose name ends with 'er'
+SELECT * FROM PRODUCTS
+WHERE PRODUCT_NAME LIKE '%er';
+
+-- Find any product name that starts with 'C'
+SELECT * FROM PRODUCTS WHERE PRODUCT_NAME LIKE 'C%';
+
+-- Find any product name that contains 'laptop' at any position
+SELECT * FROM PRODUCTS WHERE PRODUCT_NAME LIKE '%laptop%';
+
+-- Find any product name where 'o' appears in the second and third positions
+SELECT * FROM PRODUCTS WHERE PRODUCT_NAME LIKE '_o%';
+
+-- Find any product name that starts with 'T' and is at least 3 characters in length
+SELECT * FROM PRODUCTS WHERE PRODUCT_NAME LIKE 'T_%_%';
+
+-- 17. Date and Time Processing
+-- Get the current date
+SELECT CURDATE() AS CurrentDate;
+
+-- Get the current time
+SELECT CURTIME() AS CurrentTime;
+
+-- Get the current date and time
+SELECT NOW() AS CurrentDateTime;
+
+-- Find products added on a specific date (assuming Products table has AddedDate column)
+SELECT * FROM PRODUCTS WHERE AddedDate = '2025-04-01';

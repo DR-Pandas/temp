@@ -1,0 +1,109 @@
+-- ==================================================================
+-- CREATE TABLES
+-- ==================================================================
+
+-- Create 'Violations' Table
+-- This table stores information about each traffic violation
+CREATE TABLE Violations (
+    violation_id INT PRIMARY KEY,        -- Primary Key for Violation
+    violation_date DATE,                 -- Date of the violation
+    violation_type VARCHAR(100)          -- Type of violation (e.g., Speeding, Running a red light)
+);
+
+-- Create 'Drivers' Table
+-- This table stores information about drivers involved in violations
+-- It has a foreign key that references the 'Violations' table
+CREATE TABLE Drivers (
+    driver_id INT PRIMARY KEY,           -- Primary Key for Driver
+    violation_id INT,                    -- Foreign Key referencing Violations table
+    driver_name VARCHAR(100),            -- Name of the driver
+    driver_license_number VARCHAR(50),   -- Driver's license number
+    FOREIGN KEY (violation_id) REFERENCES Violations(violation_id)  -- Foreign Key Constraint
+);
+
+-- Create 'Vehicles' Table
+-- This table stores information about vehicles involved in violations
+-- It has a foreign key that references the 'Violations' table
+CREATE TABLE Vehicles (
+    vehicle_id INT PRIMARY KEY,          -- Primary Key for Vehicle
+    violation_id INT,                    -- Foreign Key referencing Violations table
+    vehicle_type VARCHAR(50),            -- Type of vehicle (e.g., Car, Truck)
+    vehicle_model VARCHAR(100),          -- Model of the vehicle (e.g., Toyota Corolla)
+    FOREIGN KEY (violation_id) REFERENCES Violations(violation_id)  -- Foreign Key Constraint
+);
+
+-- ==================================================================
+-- INSERT SAMPLE DATA
+-- ==================================================================
+
+-- Insert sample data into 'Violations' table
+-- These represent some traffic violations with different types
+INSERT INTO Violations (violation_id, violation_date, violation_type) 
+VALUES 
+(1, '2025-04-20', 'Speeding'),    -- Violation 1 (Speeding)
+(2, '2025-04-21', 'Running a red light');  -- Violation 2 (Running a red light)
+
+-- Insert sample data into 'Drivers' table
+-- These represent drivers involved in the violations above
+INSERT INTO Drivers (driver_id, violation_id, driver_name, driver_license_number) 
+VALUES 
+(1, 1, 'John Doe', 'AB1234567'),       -- Driver 1 involved in Violation 1
+(2, 2, 'Jane Smith', 'XY9876543');     -- Driver 2 involved in Violation 2
+
+-- Insert sample data into 'Vehicles' table
+-- These represent vehicles involved in the violations above
+INSERT INTO Vehicles (vehicle_id, violation_id, vehicle_type, vehicle_model) 
+VALUES 
+(1, 1, 'Car', 'Toyota Corolla'),        -- Vehicle 1 involved in Violation 1 (Car)
+(2, 2, 'Truck', 'Ford F-150');          -- Vehicle 2 involved in Violation 2 (Truck)
+
+-- ==================================================================
+-- EXAMPLE QUERIES
+-- ==================================================================
+
+-- Get all violations with type 'Speeding'
+-- This query retrieves violations where violation_type is 'Speeding'
+SELECT violation_id, violation_date, violation_type
+FROM Violations
+WHERE violation_type = 'Speeding';
+
+-- Get all drivers involved in a specific violation (violation_id = 1)
+-- This query retrieves the drivers involved in Violation 1
+SELECT driver_name, driver_license_number
+FROM Drivers
+WHERE violation_id = 1;
+
+-- Get all vehicles involved in a specific violation (violation_id = 2)
+-- This query retrieves the vehicles involved in Violation 2
+SELECT vehicle_type, vehicle_model
+FROM Vehicles
+WHERE violation_id = 2;
+
+-- ==================================================================
+-- OPTIONAL ALTER TABLE STATEMENTS
+-- ==================================================================
+
+-- Add a new column to the 'Drivers' table to store the driver's age
+ALTER TABLE Drivers
+ADD COLUMN driver_age INT;
+
+-- Modify the 'violation_type' column in the 'Violations' table to allow a larger string
+ALTER TABLE Violations
+MODIFY COLUMN violation_type VARCHAR(150);
+
+-- Drop the 'driver_age' column from the 'Drivers' table (if no longer needed)
+ALTER TABLE Drivers
+DROP COLUMN driver_age;
+
+-- ==================================================================
+-- OPTIONAL DROP TABLE STATEMENTS (if needed to remove tables)
+-- ==================================================================
+
+-- Drop the 'Vehicles' table (this will delete the table and its data)
+DROP TABLE Vehicles;
+
+-- Drop the 'Drivers' table (this will delete the table and its data)
+DROP TABLE Drivers;
+
+-- Drop the 'Violations' table (this will delete the table and its data)
+DROP TABLE Violations;

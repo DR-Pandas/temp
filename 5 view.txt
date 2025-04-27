@@ -1,0 +1,55 @@
+-- Create a new database
+CREATE DATABASE student_database;
+
+-- Switch to the newly created database
+USE student_database;
+
+-- Create the students table
+CREATE TABLE students (
+    ID INT PRIMARY KEY,
+    NAME VARCHAR(50),
+    AGE INT,
+    ADDRESS VARCHAR(100),
+    GRADE DECIMAL(5, 2)
+);
+
+-- Insert data into the students table
+INSERT INTO students (ID, NAME, AGE, ADDRESS, GRADE)
+VALUES
+(1, 'John', 20, 'New York', 85.50),
+(2, 'Alice', 22, 'Los Angeles', 90.00),
+(3, 'Bob', 19, 'Chicago', 78.25),
+(4, 'Charlie', 21, 'San Francisco', 92.75),
+(5, 'David', 23, 'Boston', 88.00),
+(6, 'Emma', 20, 'Miami', NULL),
+(7, 'Frank', 21, 'Dallas', 76.50);
+
+-- Create a view for basic student details (updatable view)
+CREATE VIEW student_basic_details AS
+SELECT ID, NAME, AGE, ADDRESS
+FROM students;
+
+-- Try updating grade via the view (non-updatable columns)
+UPDATE student_basic_details
+SET GRADE = 80.00
+WHERE ID = 1;
+
+-- Create a view for students including all columns (updatable view)
+CREATE VIEW full_student_details AS
+SELECT ID, NAME, AGE, ADDRESS, GRADE
+FROM students;
+
+-- Insert a row into the view (this will insert into the base table)
+INSERT INTO full_student_details (ID, NAME, AGE, ADDRESS, GRADE)
+VALUES (8, 'Grace', 24, 'Seattle', 89.50);
+
+-- Delete a record from the view (this removes from the base table as well)
+DELETE FROM full_student_details
+WHERE AGE = 20;
+
+-- Drop the full_student_details view
+DROP VIEW full_student_details;
+
+-- Drop the full_student_details view if it exists (safe drop)
+DROP VIEW IF EXISTS full_student_details;
+
