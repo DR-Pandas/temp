@@ -1,0 +1,45 @@
+-- Step 1: Create a new database if it doesn't exist
+CREATE DATABASE IF NOT EXISTS company_db;
+
+-- Step 2: Select the database to use
+USE company_db;
+
+-- Step 3: Create the 'employees' table with appropriate columns
+CREATE TABLE employees (
+    EMP_ID INT PRIMARY KEY,
+    EMP_NAME VARCHAR(50),
+    EMP_AGE INT,
+    EMP_DEPT VARCHAR(100),
+    BONUS DECIMAL(10, 2)
+);
+
+-- Step 4: Insert sample data into the 'employees' table
+INSERT INTO employees (EMP_ID, EMP_NAME, EMP_AGE, EMP_DEPT, BONUS) VALUES
+    (1, 'Amit', 30, 'HR', 3000.00),
+    (2, 'Bhavna', 28, 'Finance', 2500.00),
+    (3, 'Chetan', 35, 'IT', 4000.00),
+    (4, 'Deepa', 26, 'Marketing', 3200.00),
+    (5, 'Esha', 29, 'Sales', 2800.00),
+    (6, 'Farhan', 31, 'Support', 3500.00);
+
+-- Step 5: Create or replace a trigger to display bonus changes during insert, update, or delete operations
+CREATE OR REPLACE TRIGGER display_bonus_changes  
+BEFORE DELETE OR INSERT OR UPDATE ON employees  
+FOR EACH ROW  
+WHEN (NEW.EMP_ID > 0)
+DECLARE  
+    bonus_diff NUMBER; -- Variable to hold the difference between new and old bonus
+BEGIN  
+    bonus_diff := NVL(:NEW.BONUS, 0) - NVL(:OLD.BONUS, 0);  
+    
+    -- Display old bonus, new bonus, and the bonus difference
+    dbms_output.put_line('Old bonus: ' || NVL(:OLD.BONUS, 0));  
+    dbms_output.put_line('New bonus: ' || NVL(:NEW.BONUS, 0));  
+    dbms_output.put_line('Bonus difference: ' || bonus_diff);  
+END;
+/
+
+-- Step 6: Update the bonus of the employee with EMP_ID = 2
+UPDATE employees  
+SET BONUS = BONUS + 700  
+WHERE EMP_ID = 2;

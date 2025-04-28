@@ -1,0 +1,45 @@
+-- Example 1: Define and call a simple procedure 'farewell' to output a farewell message
+CREATE OR REPLACE PROCEDURE farewell  
+AS  
+BEGIN  
+    -- Print 'Goodbye!' to the console
+    dbms_output.put_line('Goodbye!');  
+END;  
+/ 
+
+-- Call the 'farewell' procedure to output the farewell message
+BEGIN
+    farewell;
+END;
+/
+
+
+-- Example 2: Declare variables and define a procedure to find the maximum of two numbers
+DECLARE  
+    a number;  -- First number
+    b number;  -- Second number
+    c number;  -- Variable to hold the maximum value
+
+    -- Procedure to find the maximum of two numbers
+    PROCEDURE findMax(x IN number, y IN number, z OUT number) IS  
+    BEGIN  
+        -- Compare the two numbers and assign the larger one to z
+        IF x > y THEN  
+            z := x;  
+        ELSE  
+            z := y;  
+        END IF;  
+    END;    
+
+BEGIN  
+    -- Initialize the numbers
+    a := 78;  
+    b := 56;  
+    
+    -- Call the procedure to find the maximum between a and b, and store in c
+    findMax(a, b, c);  
+    
+    -- Output the maximum value
+    dbms_output.put_line('Maximum of (78, 56) : ' || c);  
+END;
+/ 

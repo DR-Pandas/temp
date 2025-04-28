@@ -1,0 +1,80 @@
+-- Step 1: Create a new database
+CREATE DATABASE storedb;
+
+-- Step 2: Use the newly created database
+USE storedb;
+
+-- Step 3: Create the products table
+CREATE TABLE products (
+    PRODUCT_ID INT PRIMARY KEY,
+    PRODUCT_NAME VARCHAR(50),
+    CATEGORY VARCHAR(50),
+    PRICE DECIMAL(10,2),
+    STOCK INT
+);
+
+-- Step 4: Insert sample records into the products table
+INSERT INTO products (PRODUCT_ID, PRODUCT_NAME, CATEGORY, PRICE, STOCK) VALUES
+(101, 'Laptop', 'Electronics', 55000.00, 10),
+(102, 'Smartphone', 'Electronics', 20000.00, 25),
+(103, 'Desk Chair', 'Furniture', 5000.00, 15),
+(104, 'Notebook', 'Stationery', 50.00, 100),
+(105, 'Pen', 'Stationery', 10.00, 200),
+(106, 'Headphones', 'Electronics', 3000.00, 30);
+
+--------------------------------------------------------------------------------
+-- Example 1: Implicit Cursor Example
+--------------------------------------------------------------------------------
+
+DECLARE   
+   updated_rows NUMBER(2);  
+BEGIN  
+   -- Increase price by 10% for all electronics products
+   UPDATE products  
+   SET price = price * 1.10
+   WHERE category = 'Electronics';  
+   
+   -- Check if any rows were updated
+   IF SQL%NOTFOUND THEN  
+      DBMS_OUTPUT.PUT_LINE('No electronics products found');  
+   ELSE
+      updated_rows := SQL%ROWCOUNT; 
+      DBMS_OUTPUT.PUT_LINE(updated_rows || ' electronics products updated');  
+   END IF;   
+END;  
+/
+-- Expected Output:
+-- 3 electronics products updated
+
+--------------------------------------------------------------------------------
+-- Example 2: Explicit Cursor Example
+--------------------------------------------------------------------------------
+
+DECLARE  
+   p_id products.product_id%TYPE;  
+   p_name products.product_name%TYPE;  
+   p_price products.price%TYPE;  
+
+   -- Define a cursor to fetch product_id, product_name, and price from products table
+   CURSOR c_products IS  
+      SELECT product_id, product_name, price FROM products;  
+BEGIN  
+   OPEN c_products;  
+
+   -- Loop through each row fetched by the cursor
+   LOOP  
+      FETCH c_products INTO p_id, p_name, p_price;  
+      EXIT WHEN c_products%NOTFOUND;  
+      DBMS_OUTPUT.PUT_LINE(p_id || ' ' || p_name || ' - Rs.' || p_price);  
+   END LOOP;  
+
+   CLOSE c_products;  
+END;  
+/
+-- Expected Output:
+-- 101 Laptop - Rs.60500
+-- 102 Smartphone - Rs.22000
+-- 103 Desk Chair - Rs.5000
+-- 104 Notebook - Rs.50
+-- 105 Pen - Rs.10
+-- 106 Headphones - Rs.3300
